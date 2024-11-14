@@ -79,7 +79,7 @@ def generate(
             raise ValueError("Unknown sampler value %s. ")
 
         latents_shape = (1, 4, LATENTS_HEIGHT, LATENTS_WIDTH)
-
+        print(input_image)
         if input_image:
             encoder = models["encoder"]
             encoder.to(device)

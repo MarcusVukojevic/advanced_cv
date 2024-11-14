@@ -38,7 +38,7 @@ for k, v in bsrgan_model.named_parameters():
 bsrgan_model = bsrgan_model.to(DEVICE)
 
 # TEXT TO IMAGE
-prompt = "A beautiful cat with green eyes 8k resolution."
+prompt = "A beautiful renaissance woman with a higly detailed dress"
 uncond_prompt = ""  # Prompt negativo
 do_cfg = True
 cfg_scale = 8  # Scala di configurazione
@@ -68,12 +68,12 @@ output_image = pipeline.generate(
     idle_device="cpu",
     tokenizer=tokenizer,
 )
-
+import numpy as np
 # Converti l'output generato in un'immagine PIL
-img = Image.fromarray(output_image)
+img = Image.fromarray(output_image).convert('RGB')
 
 # Prepara l'immagine per il modello BSRGAN
-img_L = util.uint2tensor4(util.imread_uint(img, n_channels=3)).to(DEVICE)
+img_L = util.uint2tensor4(np.array(img, dtype=np.uint8)).to(DEVICE)
 
 # Applica BSRGAN per la super-risoluzione
 with torch.no_grad():
@@ -81,6 +81,6 @@ with torch.no_grad():
 img_E = util.tensor2uint(img_E)
 
 # Salva l'immagine finale con BSRGAN applicato
-util.imsave(img_E, "nome_del_file_finale.png")
+util.imsave(img_E, "siura.png")
 
 
