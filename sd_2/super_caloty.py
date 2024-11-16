@@ -95,6 +95,41 @@ def get_views(image, window_size=128, stride=64, random_jitter=False, vae_scale_
 
     return views
 
+def assemble_patches(patches, image_shape, window_size=128, stride=64):
+    """
+    Ricompone le patch in un'unica immagine, calcolando la media nei punti di sovrapposizione.
+
+    Parametri:
+    - patches: lista di patch (array NumPy)
+    - image_shape: dimensioni dell'immagine originale (altezza, larghezza, canali)
+    - window_size: dimensione di ciascun patch
+    - stride: passo tra i patch
+
+    Ritorna:
+    - reassembled_image: immagine ricomposta come array NumPy
+    """
+    height, width, channels = image_shape
+    reassembled_image = np.zeros((height, width, channels), dtype=np.float32)
+    weight_matrix = np.zeros((height, width, channels), dtype=np.float32)
+
+    num_blocks_height = (height - window_size) // stride + 1
+    num_blocks_width = (width - window_size) // stride + 1
+
+    for i, patch in enumerate(patches):
+        h_start = (i // num_blocks_width) * stride
+        h_end = h_start + window_size
+        w_start = (i % num_blocks_width) * stride
+        w_end = w_start + window_size
+
+        reassembled_image[h_start:h_end, w_start:w_end] += patch
+        weight_matrix[h_start:h_end, w_start:w_end] += 1
+
+    # Evita la divisione per zero
+    weight_matrix = np.maximum(weight_matrix, 1)
+    reassembled_image /= weight_matrix
+
+    return reassembled_image.astype(np.uint8)
+
 
 def rescale(x, old_range, new_range, clamp=False):
     old_min, old_max = old_range
@@ -167,9 +202,10 @@ key = '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'
 model_GPT = 'gpt-4o-mini'
 
 prompt = 'image with a better quality of '
-
+assembly = []
 
 views = get_views(img_E, window_size=512)
+
 #Verifica delle dimensioni di ciascun patch generato
 for idx, patch in enumerate(views):
     print(f"Patch {idx + 1} dimensioni: {patch.shape}")
@@ -203,17 +239,6 @@ for idx, patch in enumerate(views):
     ) 
     print("\nRisposta:",risposta.choices[0].message.content.strip())
 
-    # Parametri per il rumore
-    mean = 0           # Media del rumore
-    stddev = 25       # Deviazione standard del rumore
-
-    # Crea il rumore gaussiano
-    gaussian_noise = np.random.normal(mean, stddev, patch.shape)
-
-    # Aggiungi il rumore all'immagine e clippa i valori tra 0 e 255
-    noisy_patch = patch + gaussian_noise
-    noisy_patch = np.clip(noisy_patch, 0, 255).astype(np.uint8)
-
     img_pil = Image.fromarray(patch)
     
     # SAMPLER
@@ -239,22 +264,42 @@ for idx, patch in enumerate(views):
     
     # Converti l'output generato in un'immagine PIL
     img = Image.fromarray(output_image)
-    fig, axes = plt.subplots(3, 1, figsize=(10, 10))
+    fig, axes = plt.subplots(1, 2, figsize=(10, 10))
     axes = axes.ravel()  # Appiattisce l'array per accedere agli assi più facilmente
     axes[0].imshow(patch)
     axes[0].set_title(f"patch1")
     axes[0].axis('off')
-    axes[1].imshow(noisy_patch)
-    axes[1].set_title(f"patch1 noise")
+    axes[1].imshow(img)
+    axes[1].set_title(f"patch migliorato")
     axes[1].axis('off')
-    axes[2].imshow(img)
-    axes[2].set_title(f"patch migliorato")
-    axes[2].axis('off')
     plt.tight_layout()
     plt.savefig(f"output_plot_{idx}.png", format="PNG", dpi=300)
     plt.show()
 
-    
+    assembly.append(img)
+
+# Ricomponi l'immagine dalle patch migliorate
+image_shape = img_E.shape  # Dimensioni originali dell'immagine
+output_image = assemble_patches(assembly, image_shape, window_size=512, stride=256)
+
+# Salva l'immagine ricomposta
+output_reassembled_path = "immagine_ricomposta.png"
+Image.fromarray(output_image).save(output_reassembled_path)
+
+print(f"Immagine ricomposta salvata in: {output_reassembled_path}")
+
+
+img = Image.fromarray(output_image)
+fig, axes = plt.subplots(1, 2, figsize=(10, 10))
+axes = axes.ravel()  # Appiattisce l'array per accedere agli assi più facilmente
+axes[0].imshow(img_E)
+axes[0].set_title(f"Immagine Iniziale")
+axes[0].axis('off')
+axes[1].imshow(img)
+axes[1].set_title(f"Immagine Migliorata")
+axes[1].axis('off')
+plt.tight_layout()
+plt.show() 
 
 
     
