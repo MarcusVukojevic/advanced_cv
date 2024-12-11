@@ -65,7 +65,7 @@ if __name__ == "__main__":
 
     
     # Processa le patch
-    processed_patches = processor.process_patches_maky(patches)
+    processed_patches = processor.process_patches_parallel(patches, num_parallel=5)
   
     # Ricomponi l'immagine
     reassembled_image = processor.assemble_patches(patches=processed_patches, positions=positions, image_shape=img_bsrgan.shape, window_size=window_size_param)

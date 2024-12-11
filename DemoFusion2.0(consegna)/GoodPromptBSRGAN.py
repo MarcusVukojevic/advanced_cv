@@ -10,6 +10,7 @@ from transformers import CLIPTokenizer
 from openai import OpenAI
 import pipeline
 import model_loader
+from concurrent.futures import ThreadPoolExecutor
 
 
 class ImageProcessor:
@@ -42,6 +43,7 @@ class ImageProcessor:
         self._set_device()
         self.model = model_loader.preload_models_from_standard_weights("data/v1-5-pruned-emaonly.ckpt", self.device)
         self.tokenizer = CLIPTokenizer("data/tokenizer_vocab.json", merges_file="data/tokenizer_merges.txt")
+        self.patches_pil=[]
 
     def _set_device(self):
         if torch.cuda.is_available() and self.allow_cuda:
@@ -391,16 +393,8 @@ class ImageProcessor:
         return img
     
 
-
-    def process_patches_maky_parallel(self, patches):
-        """
-        Parallelizza l'elaborazione dei patch usando CUDA.
-        """
-        # Verifica se CUDA è disponibile
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
-        # Convert patches in tensori e caricali sulla GPU
-        patches_tensor = torch.stack([torch.tensor(patch, dtype=torch.uint8) for patch in patches]).to(device)
+    # Funzione per elaborare un singolo patch
+    def process_single_patch(self,idx):
         prompts = [
             "A serene and bright sky with soft gradients of blue, creating a peaceful backdrop.",
             "A clear sky blending into the elegant face of a renaissance woman, surrounded by soft light.",
@@ -480,44 +474,16 @@ class ImageProcessor:
             "A combination of the fox's bushy tail and the mossy forest, creating a harmonious and serene scene."
         ]
         prompts=prompt_foxy
-        
-        # Genera le immagini in batch
-        output_images = self.diffusion_batch_parallel(patches_tensor, prompts, device)
-
-        # Converti le immagini generate da tensori a immagini PIL
-        processed_patches = [Image.fromarray(img.cpu().numpy()) for img in output_images]
-        
+        result = self.diffusion(self.patches_pil[idx], prompts[idx])
+        torch.cuda.empty_cache()  # Clear GPU cache after processing
+        return result
+    
+    def process_patches_parallel(self, patches, num_parallel=2):
+        # Converte i patch in immagini PIL
+        self.patches_pil = [Image.fromarray(patch) for patch in patches]
+        # Parallelizza il processo con ThreadPoolExecutor
+        with ThreadPoolExecutor(max_workers=num_parallel) as executor:
+            processed_patches = list(executor.map(self.process_single_patch, range(len(patches))))
         return processed_patches
-
-    def diffusion_batch_parallel(self, patches_tensor, descriptions, device):
-        """
-        Funzione che applica il modello di diffusione in batch.
-        """
-        sampler = "ddpm"
-        num_inference_steps = 50
-        seed = 42
-
-        # Converti i tensori in un formato utilizzabile dalla pipeline
-        patches_list = [Image.fromarray(patch.cpu().numpy()) for patch in patches_tensor]
-
-        # Genera immagini usando la pipeline
-        output_images = pipeline.generate_batch(
-            prompts=['Smooth and higher quality image with enhanced details ' + desc for desc in descriptions],
-            uncond_prompts=["" for _ in descriptions],
-            input_images=patches_list,
-            strength=0.60,
-            do_cfg=True,
-            cfg_scale=14,
-            sampler_name=sampler,
-            n_inference_steps=num_inference_steps,
-            seed=seed,
-            models=self.model,
-            device=self.device,  # Imposta CUDA
-            idle_device=self.device,
-            tokenizer=self.tokenizer
-        )
-
-        # La pipeline restituisce immagini generate, che possono essere tensori o numpy array
-        return output_images
 
 
