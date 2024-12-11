@@ -478,7 +478,7 @@ class ImageProcessor:
         torch.cuda.empty_cache()  # Clear GPU cache after processing
         return result
     
-    def process_patches_parallel(self, patches, num_parallel=2):
+    def process_patches_parallel(self, patches, num_parallel=10):
         # Converte i patch in immagini PIL
         self.patches_pil = [Image.fromarray(patch) for patch in patches]
         # Parallelizza il processo con ThreadPoolExecutor

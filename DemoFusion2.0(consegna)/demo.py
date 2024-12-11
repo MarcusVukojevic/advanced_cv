@@ -65,14 +65,14 @@ if __name__ == "__main__":
 
     
     # Processa le patch
-    processed_patches = processor.process_patches_parallel(patches, num_parallel=5)
+    processed_patches = processor.process_patches_parallel(patches, num_parallel=3)
   
     # Ricomponi l'immagine
     reassembled_image = processor.assemble_patches(patches=processed_patches, positions=positions, image_shape=img_bsrgan.shape, window_size=window_size_param)
 
     # Salva e mostra
     img = Image.fromarray(reassembled_image)
-    img.save("immagini/foxy_out_carlotta.png")
+    img.save("immagini/foxy_out_carlotta1.png")
 
     fig, axes = plt.subplots(1, 3, figsize=(10, 10))
     axes = axes.ravel()  # Appiattisce l'array per accedere agli assi più facilmente
