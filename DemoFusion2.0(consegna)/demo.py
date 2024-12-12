@@ -7,7 +7,7 @@ from GoodPromptBSRGAN import ImageProcessor
 if __name__ == "__main__":
 
     processor = ImageProcessor(device='cuda', allow_cuda=True, allow_mps=False)
-
+    prompt='image of a cat'
     window_size_param = 512
     stride_param = 362
 
