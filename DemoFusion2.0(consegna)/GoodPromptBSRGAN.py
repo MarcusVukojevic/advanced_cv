@@ -376,7 +376,7 @@ class ImageProcessor:
             prompt='Smooth and higher quality image with enhanced details' + description,
             uncond_prompt="",
             input_image=image,
-            strength=0.25,
+            strength=0.3,
             do_cfg=True,
             cfg_scale=14,
             sampler_name=sampler,
