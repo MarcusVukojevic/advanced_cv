@@ -80,7 +80,7 @@ FlashSDL is an advanced framework for generating and refining images using diffu
 
 ## Contact
 
-For questions or issues, please contact [MarcusVukojevic](https://github.com/MarcusVukojevic) [CarlottaGiacchetta] (https://github.com/CarlottaGiacchetta) [ChiaraMusso](https://github.com/ChiaraMuss).
+For questions or issues, please contact [MarcusVukojevic](https://github.com/MarcusVukojevic) [CarlottaGiacchetta] (https://github.com/CarlottaGiacchetta) [ChiaraMuss](https://github.com/ChiaraMuss).
 
 ---
 
