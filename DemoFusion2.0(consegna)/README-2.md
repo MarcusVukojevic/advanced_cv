@@ -18,7 +18,7 @@ FlashSDL is an advanced framework for generating and refining images using diffu
 1. Clone the repository:
    ```bash
    git clone https://github.com/MarcusVukojevic/advanced_cv.git
-   cd advanced_cv/FlashSDL(consegna)
+   cd advanced_cv/DemoFusion2.0(consegna)
    ```
 2. Set up necessary resources (e.g., pre-trained models):
    - Download model weights as specified in the project documentation.
