@@ -7,7 +7,7 @@ FlashSDL is an advanced framework for generating and refining high-resolution im
 ## Features
 
 - **Prompt-Based Generation**: Uses detailed text prompts to guide the image generation process.
-- **Stable Diffusion Integration**: Integrates Stable Diffusion Lite (SDL), optimized for efficient and high-quality image generation.
+- **Stable Diffusion Integration**: Integrates Stable Diffusion v1-5, optimized for efficient and high-quality image generation.
 - **High-Resolution Output**: Supports iterative upscaling with BSRGAN to enhance resolution and visual quality.
 - **Patch Refinement**: Divides the image into patches and refines each section using specific prompts to ensure detail and global consistency.
 - **Customizable and Modular**: A flexible and modular pipeline tailored for image generation and restoration tasks.
