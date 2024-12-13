@@ -19,8 +19,6 @@ if __name__ == "__main__":
     # Parametri
     input_image_path = "immagini/foxy.png"
     bsrgan_model_path = "../data/BSRGANx2.pth"
-    model_gpt_key = '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'
-    model_gpt_name = "gpt-4o-mini"
 
     # Caricamento immagine
     img_iniziale = processor.load_and_preprocess_image(input_image_path, 512, 512)
