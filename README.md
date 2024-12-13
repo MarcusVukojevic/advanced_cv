@@ -26,7 +26,7 @@ FlashSDL is an advanced framework for generating and refining high-resolution im
 2. Set up necessary resources (e.g., pre-trained models):
    - Download vocab.json and merges.txt from https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5/tree/main/tokenizer and save them in the data folder
    - Download v1-5-pruned-emaonly.ckpt from https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5/tree/main and save it in the data folder
-   - Download BSRGANx2.pth from https://github.com/cszn/BSRGAN
+   - Download BSRGANx2.pth from [https://github.com/cszn/BSRGAN](https://github.com/cszn/BSRGAN/tree/main/model_zoo)
 
 ---
 
