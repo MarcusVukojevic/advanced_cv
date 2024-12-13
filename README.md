@@ -84,8 +84,6 @@ FlashSD is an advanced framework for generating and refining high-resolution ima
 
 ## Contact
 
-## Contact
-
 For questions or issues, please contact:
 - [MarcusVukojevic](https://github.com/MarcusVukojevic)
 - [CarlottaGiacchetta](https://github.com/CarlottaGiacchetta)
