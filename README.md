@@ -1,6 +1,6 @@
 # FlashSDL
 
-FlashSDL is an advanced framework for generating and refining high-resolution images using diffusion models. It leverages cutting-edge techniques, specifically Stable Diffusion from scratch , to produce detailed outputs guided by user-defined prompts. The pipeline supports image generation, upscaling, and patch-based refinement to achieve high-quality results.
+FlashSDL is an advanced framework for generating and refining high-resolution images using diffusion models. It leverages cutting-edge techniques, specifically Stable Diffusion wich was implemented by us from scratch , to produce detailed outputs guided by user-defined prompts. The pipeline supports image generation, upscaling, and patch-based refinement to achieve high-quality results.
 
 ---
 
