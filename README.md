@@ -89,7 +89,7 @@ FlashSDL is an advanced framework for generating and refining high-resolution im
 For questions or issues, please contact:
 - [MarcusVukojevic](https://github.com/MarcusVukojevic)
 - [CarlottaGiacchetta](https://github.com/CarlottaGiacchetta)
-- [ChiaraMusso](https://github.com/ChiaraMusso)
+- [ChiaraMusso](https://github.com/ChiaraMuss)
 
 ---
 
