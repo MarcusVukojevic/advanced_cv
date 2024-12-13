@@ -6,13 +6,13 @@ from GoodPromptBSRGAN import ImageProcessor
 # Esempio di utilizzo della classe
 if __name__ == "__main__":
 
-    processor = ImageProcessor(device='cuda', allow_cuda=True, allow_mps=False)
-    prompt='image of a cat'
+    prompt='image of a little beatiful fox in the nature with a lot of furr, centered in the image immerse in the nature'
+    processor = ImageProcessor(device='mps')
     window_size_param = 512
     stride_param = 362
 
-    input_image_path = "immagini/foxy.png"
+    input_image_path = "immagini/foxy_2.png"
 
-    processor.FlashSDL(input_image_path=input_image_path, bsrgan_time=3, parallel=2)
+    processor.FlashSDL(input_image_path=input_image_path,prompt=prompt, bsrgan_time=2, parallel=1)
 
 

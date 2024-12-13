@@ -8,7 +8,7 @@ from transformers import CLIPTokenizer
 import pipeline_sd
 import model_loader
 from concurrent.futures import ThreadPoolExecutor
-import matplotlib as plt
+import matplotlib.pyplot as plt
 
 
 class ImageProcessor:
@@ -23,7 +23,7 @@ class ImageProcessor:
     - model: Il modello preaddestrato caricato per l'elaborazione delle immagini.
     - tokenizer: Il tokenizer CLIP utilizzato per gestire i prompt di testo per il modello di diffusione.
     """
-    def __init__(self, device="cpu", allow_cuda=False, allow_mps=False):
+    def __init__(self, device="cpu"):
         """
         Parametri:
         - device (str): Il dispositivo predefinito ("cpu", "cuda" o "mps").
@@ -36,8 +36,6 @@ class ImageProcessor:
         - Inizializza il tokenizer CLIP con i file di vocabolario e merge specificati.
         """
         self.device = device
-        self.allow_cuda = allow_cuda
-        self.allow_mps = allow_mps
         self._set_device()
         self.model = model_loader.preload_models_from_standard_weights("data/v1-5-pruned-emaonly.ckpt", self.device)
         self.tokenizer = CLIPTokenizer("data/tokenizer_vocab.json", merges_file="data/tokenizer_merges.txt")
@@ -45,9 +43,9 @@ class ImageProcessor:
         self.patches_pil=[]
 
     def _set_device(self):
-        if torch.cuda.is_available() and self.allow_cuda:
+        if torch.cuda.is_available():
             self.device = "cuda"
-        elif (torch.has_mps or torch.backends.mps.is_available()) and self.allow_mps:
+        elif (torch.has_mps or torch.backends.mps.is_available()):
             self.device = "mps"
         print(f"Using device: {self.device}")
 
@@ -230,7 +228,7 @@ class ImageProcessor:
         return util.tensor2uint(output)
 
     
-    def process_patches_maky(self, patches):
+    def process_patches(self, patches):
         """
         Elabora una lista di patch di immagini utilizzando un modello di diffusione con prompt specifici.
 
@@ -486,7 +484,7 @@ class ImageProcessor:
         return processed_patches
     
 
-    def FlashSDL(self, input_image_path=None, prompt=None, uncond_prompt=None, do_cfg=True, cfg_scale=8, window_size=512, stride=362, bsrgan_time=2, parallel=1):
+    def FlashSDL(self, input_image_path=None, prompt=None, uncond_prompt="ugly, low-resolution", do_cfg=True, cfg_scale=8, window_size=512, stride=362, bsrgan_time=2, parallel=1):
         bsrgan_model_path = "data/BSRGANx2.pth"
         nome = input_image_path.split('.')[0]
         print(nome)
@@ -511,9 +509,10 @@ class ImageProcessor:
                 idle_device=self.device,
                 tokenizer=tokenizer,
             )
-            output_image.save(f"{input_image_path}")
-
-
+            img = Image.fromarray(output_image).convert('RGB')
+            img.save(input_image_path)
+            print(f"immagine generata in {input_image_path}!")
+        
         img_iniziale = self.load_and_preprocess_image(input_image_path)
         img_np = np.array(img_iniziale, dtype=np.uint8)
         print("dimensione dell'immagine iniziale:",img_np.shape)
@@ -526,7 +525,7 @@ class ImageProcessor:
         print("dimensione dell'immagine finale:",img_bsrgan.shape)
         img = Image.fromarray(img_bsrgan)
         img.save(f"{nome}_bsrgan.png")
-        print(f'immagine ingrandita salvata in {input_image_path}_bsrgan.png')
+        print(f'immagine ingrandita salvata in {input_image_path}.png')
 
         # Suddividi in patch
         patches, positions  = self.get_views(img_bsrgan, window_size=window_size, stride=stride, random_jitter=False, vae_scale_factor=1)
