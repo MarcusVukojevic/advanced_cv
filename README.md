@@ -6,10 +6,12 @@ FlashSDL is an advanced framework for generating and refining high-resolution im
 
 ## Features
 
-- **Prompt-Based Generation**: Leverages user-defined prompts to guide the image generation process.
-- **Stable Diffusion Integration**: Utilizes Stable Diffusion from Scherck for generating images from latent space guided by prompts.
-- **Customizable Workflow**: Modular pipeline for flexible image generation and restoration.
-- **Advanced Attention Mechanisms**: Employs self-attention for improved detail and consistency.
+- **Prompt-Based Generation**: Uses detailed text prompts to guide the image generation process.
+- **Stable Diffusion Integration**: Integrates Stable Diffusion Lite (SDL), optimized for efficient and high-quality image generation.
+- **High-Resolution Output**: Supports iterative upscaling with BSRGAN to enhance resolution and visual quality.
+- **Patch Refinement**: Divides the image into patches and refines each section using specific prompts to ensure detail and global consistency.
+- **Customizable and Modular**: A flexible and modular pipeline tailored for image generation and restoration tasks.
+- **Advanced Metrics Integration**: Provides tools for quality analysis (PSNR, SSIM) and performance optimization based on project requirements.
 
 ---
 
@@ -21,7 +23,6 @@ FlashSDL is an advanced framework for generating and refining high-resolution im
    cd advanced_cv/FlashSDL
    ```
 
-QUI METTERE I LINK SU DOVE TORVARLI
 2. Set up necessary resources (e.g., pre-trained models):
    - Download vocab.json and merges.txt from https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5/tree/main/tokenizer and save them in the data folder
    - Download v1-5-pruned-emaonly.ckpt from https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5/tree/main and save it in the data folder
@@ -34,10 +35,10 @@ QUI METTERE I LINK SU DOVE TORVARLI
 ### Running the Pipeline
 
 1. Configure parameters for image generation.
-- prompt: Descriptive text prompt guiding the image generation process (used when creating a new image).
-- input_image_path: Path to save the generated image or path to an existing image to be refined.
-- bsrgan_time: Number of times to apply BSRGAN upscaling (each pass increases resolution by 2x).
-- parallel: Number of patches to process in parallel (set to 1 for sequential processing).
+- **prompt**: Descriptive text prompt guiding the image generation process (used when creating a new image).
+- **input_image_path**: Path to save the generated image or path to an existing image to be refined.
+- **bsrgan_time**: Number of times to apply BSRGAN upscaling (each pass increases resolution by 2x).
+- **parallel**: Number of patches to process in parallel (set to 1 for sequential processing).
 
 2. Run the demo script:
    ```bash
@@ -79,8 +80,7 @@ QUI METTERE I LINK SU DOVE TORVARLI
 
 ### Specialized Modules
 
-- **`GoodPromptBSRGAN.py`**: Enhances image patches using BSRGAN and prompt-specific adjustments.
-
+- **`GoodPromptBSRGAN.py`**:  Refines image patches with BSRGAN and prompt-specific adjustments.
 
 ## Contact
 
