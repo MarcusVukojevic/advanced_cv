@@ -1,6 +1,6 @@
 # FlashSDL
 
-FlashSDL is an advanced framework for generating and refining images using diffusion models. This repository focuses on leveraging state-of-the-art techniques, specifically Stable Diffusion from Scherck, to produce high-quality outputs guided by user-defined prompts.
+FlashSDL is an advanced framework for generating and refining high-resolution images using diffusion models. It leverages cutting-edge techniques, specifically Stable Diffusion from Scherck, to produce detailed outputs guided by user-defined prompts. The pipeline supports image generation, upscaling, and patch-based refinement to achieve high-quality results.
 
 ---
 
@@ -18,8 +18,10 @@ FlashSDL is an advanced framework for generating and refining images using diffu
 1. Clone the repository:
    ```bash
    git clone https://github.com/MarcusVukojevic/advanced_cv.git
-   cd advanced_cv/DemoFusion2.0(consegna)
+   cd advanced_cv/FlashSDL
    ```
+
+QUI METTERE I LINK SU DOVE TORVARLI
 2. Set up necessary resources (e.g., pre-trained models):
    - Download model weights as specified in the project documentation.
 
@@ -30,24 +32,24 @@ FlashSDL is an advanced framework for generating and refining images using diffu
 ### Running the Pipeline
 
 1. Configure parameters for image generation.
+- prompt: Descriptive text prompt guiding the image generation process (used when creating a new image).
+- input_image_path: Path to save the generated image or path to an existing image to be refined.
+- bsrgan_time: Number of times to apply BSRGAN upscaling (each pass increases resolution by 2x).
+- parallel: Number of patches to process in parallel (set to 1 for sequential processing).
+
 2. Run the demo script:
    ```bash
-   python demo.py --prompt "<your_prompt>" --output <output_folder>
+   python demo.py
    ```
-
-### Key Parameters
-- `--prompt`: Text prompt guiding the image generation process.
-- `--output`: Path to the folder where generated images will be saved.
-- `--model`: Specify the pre-trained model or weight file to use.
-
----
 
 ## Workflow
 
-1. **Prompt Input**: The user provides a descriptive prompt to guide the generation process.
-2. **Latent Space Initialization**: Begins with noise or latent space vectors.
-3. **Processing with Stable Diffusion from Scherck**: Scherck's Stable Diffusion enhances the generated images.
-4. **Output Generation**: Produces high-resolution, coherent images.
+1. **Prompt-Based Image Generation**: If generating an image, provide a descriptive prompt. The framework uses Stable Diffusion Lite (SDL) that we have reimplemented from scratch to create an initial 512x512 image.
+
+2. **High resolution image using Bsrgan**: The generated image is passed through BSRGAN for upscaling. The number of upscaling iterations is determined by the bsrgan_time parameter. Each iteration increases the image size by a factor of 2.
+
+3. **Patch-Based Image Refinement**: The upscaled image is divided into 512x512 patches. Each patch is processed with SDL using prompts specific to that patch, allowing detailed refinement. The refined patches are then recombined to form the final high-resolution image.
+
 
 ---
 
@@ -80,10 +82,11 @@ FlashSDL is an advanced framework for generating and refining images using diffu
 
 ## Contact
 
-For questions or issues, please contact [MarcusVukojevic](https://github.com/MarcusVukojevic) [CarlottaGiacchetta](https://github.com/CarlottaGiacchetta) [ChiaraMuss](https://github.com/ChiaraMuss).
+For questions or issues, please contact [MarcusVukojevic](https://github.com/MarcusVukojevic) [CarlottaGiacchetta] (https://github.com/CarlottaGiacchetta) [ChiaraMusso](https://github.com/ChiaraMuss).
 
 ---
 
 ## Acknowledgments
 
 This project was developed for the Advanced Computer Vision course at the University of Trento, taught by Professors Elisa Ricci and Niculae Sebe.
+
