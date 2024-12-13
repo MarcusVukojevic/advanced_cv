@@ -11,7 +11,7 @@ FlashSDL is an advanced framework for generating and refining high-resolution im
 - **High-Resolution Output**: Supports iterative upscaling with BSRGAN to enhance resolution and visual quality.
 - **Patch Refinement**: Divides the image into patches and refines each section using specific prompts to ensure detail and global consistency.
 - **Customizable and Modular**: A flexible and modular pipeline tailored for image generation and restoration tasks.
-- **Advanced Metrics Integration**: Provides tools for quality analysis (PSNR, SSIM) and performance optimization based on project requirements.
+
 
 ---
 
