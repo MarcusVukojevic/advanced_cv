@@ -488,6 +488,8 @@ class ImageProcessor:
 
     def FlashSDL(self, input_image_path=None, prompt=None, uncond_prompt=None, do_cfg=True, cfg_scale=8, window_size=512, stride=362, bsrgan_time=2, parallel=1):
         bsrgan_model_path = "data/BSRGANx2.pth"
+        nome = input_image_path.split('.')[0]
+        print(nome)
 
         # Caricamento immagine
         if prompt is not None:
@@ -518,11 +520,13 @@ class ImageProcessor:
         # Applica BSRGAN
         for i in range(bsrgan_time):
             print(i)
-            img_bsrgan = self.apply_bsrgan(img_np, bsrgan_model_path)
+            img_np = self.apply_bsrgan(img_np, bsrgan_model_path)
+            print("dimensione dell'immagine:",img_np.shape)
+        img_bsrgan = img_np
         print("dimensione dell'immagine finale:",img_bsrgan.shape)
         img = Image.fromarray(img_bsrgan)
-        img.save(f"{input_image_path}_bsrgan")
-        print(f'immagine ingrandita salvata in {input_image_path}_bsrgan')
+        img.save(f"{nome}_bsrgan.png")
+        print(f'immagine ingrandita salvata in {input_image_path}_bsrgan.png')
 
         # Suddividi in patch
         patches, positions  = self.get_views(img_bsrgan, window_size=window_size, stride=stride, random_jitter=False, vae_scale_factor=1)
@@ -538,11 +542,11 @@ class ImageProcessor:
             processed_patches = self.process_patches(patches)
 
         # Ricomponi l'immagine
-        reassembled_image = self.assemble_patches(patches=processed_patches, positions=positions, image_shape=img_bsrgan.shape, window_size=window_size, stride=stride)
+        reassembled_image = self.assemble_patches(patches=processed_patches, positions=positions, image_shape=img_bsrgan.shape, window_size=window_size)
         # Salva e mostra
         img = Image.fromarray(reassembled_image)
-        img.save(f"{input_image_path}_finale")
-        print(f'immagine finale migliorata salvata in {input_image_path}_finale')
+        img.save(f"{nome}_finale.png")
+        print(f'immagine finale migliorata salvata in {input_image_path}_finale.png')
         fig, axes = plt.subplots(1, 3, figsize=(10, 10))
         axes = axes.ravel()  # Appiattisce l'array per accedere agli assi più facilmente
         axes[0].imshow(img_iniziale)
