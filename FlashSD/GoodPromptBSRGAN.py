@@ -470,7 +470,47 @@ class ImageProcessor:
             "A close-up of the fox's bushy tail, blending seamlessly into the vibrant green moss.",
             "A combination of the fox's bushy tail and the mossy forest, creating a harmonious and serene scene."
         ]
-        prompts=prompt_foxy
+        prompt_teddy = [
+            "White background.",
+            "White background.",
+            "White background with a piece of the teddy bear's left ear.",
+            "White background with a piece of the teddy bear's head.",
+            "White background with a piece of the teddy bear's head.",
+            "White background with a piece of the teddy bear's right ear.",
+            "White background.",
+            "White background.",
+            "White background with a piece of the teddy bear's left ear and face.",
+            "Left side of the teddy bear's face.",
+            "Center part of the teddy bear's face.",
+            "Center-right part of the teddy bear's face.",
+            "White background.",
+            "White background.",
+            "White background with a piece of the teddy bear's brown fur.",
+            "Left side of the teddy bear with part of the nose.",
+            "Teddy bear's nose and part of the bow on its neck.",
+            "Teddy bear's nose and part of the bow on its neck.",
+            "White background.",
+            "White background.",
+            "White background with the teddy bear's left paw.",
+            "Teddy bear's left paw and part of the bow.",
+            "Teddy bear's bow and belly.",
+            "Teddy bear's bow and belly.",
+            "White background and white table.",
+            "White background and white table.",
+            "White background and white table with the teddy bear's left paw resting on it.",
+            "Teddy bear's left paw.",
+            "Between the teddy bear's legs.",
+            "Between the teddy bear's legs and part of the right paw.",
+            "Teddy bear's right paw.",
+            "White background and white table.",
+            "White background and white table.",
+            "White background and white table with the teddy bear's left paw resting on it.",
+            "White table where the teddy bear's left paw is resting.",
+            "Middle part of the teddy bear.",
+            "Piece of the teddy bear's right paw resting on the table."
+        ]
+
+        prompts=prompt_teddy
         result = self.diffusion(self.patches_pil[idx], prompts[idx])
         torch.cuda.empty_cache()  # Clear GPU cache after processing
         return result
@@ -533,6 +573,7 @@ class ImageProcessor:
         for patch in patches:
             if patch.shape != (512, 512, 3):
                 print('-- error: HO UN ERRORE DI DIMENSIONE IN UN PATCH, shape:',patch.shape)
+       
         
         # Processa le patch
         if parallel > 1:
